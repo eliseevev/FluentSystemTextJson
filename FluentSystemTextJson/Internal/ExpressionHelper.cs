@@ -7,20 +7,10 @@ namespace FluentSystemTextJson.Internal
     {
         internal static PropertyInfo GetPropertyExpression<T>(Expression<Func<T, object>> propertyExpression)
         {
-            if (!(GetMemberExpression(propertyExpression) is MemberExpression memberExpression))
-            {
-                throw new ArgumentException("Expression is not a member access", nameof(propertyExpression));
-            }
-
-            if (!(memberExpression.Member is PropertyInfo propertyInfo))
-            {
-                throw new ArgumentException("Member is not a property", nameof(propertyExpression));
-            }
-
-            return propertyInfo;
+            return GetPropertyExpressionInternal(propertyExpression);
         }
 
-        public static PropertyInfo GetPropertyExpression<T>(Expression<Func<T, string>> propertyExpression)
+        internal static PropertyInfo GetPropertyExpression<T>(Expression<Func<T, string>> propertyExpression)
         {
             var parameter = propertyExpression.Parameters[0];
             var body = Expression.Convert(propertyExpression.Body, typeof(object));
@@ -33,12 +23,12 @@ namespace FluentSystemTextJson.Internal
         {
             if (!(GetMemberExpression(propertyExpression) is MemberExpression memberExpression))
             {
-                throw new ArgumentException("Expression is not a member access", nameof(propertyExpression));
+                throw new ArgumentException("Expression is not a member expression.", nameof(propertyExpression));
             }
 
             if (!(memberExpression.Member is PropertyInfo propertyInfo))
             {
-                throw new ArgumentException("Member is not a property", nameof(propertyExpression));
+                throw new ArgumentException("Member is not a property.", nameof(propertyExpression));
             }
 
             return propertyInfo;

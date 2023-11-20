@@ -1,4 +1,7 @@
-﻿namespace FluentSystemTextJson.Contracts
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+
+namespace FluentSystemTextJson.Contracts
 {
     public class JsonSerializerOptionsFactoryOptions
     {
@@ -9,5 +12,13 @@
             LogProfiles.Add(logProfile);
             return this;
         }
+
+        public bool IncludeDefaultNoProfileConverter { get; set; } = true;
+
+        public string DefaultNoProfileConverterMessage { get; set; } = "No profile";
+
+        public bool IncludeDefaultEnumerableConverter { get; set; } = true;
+
+        public ICollection<JsonConverter> AdditionalConverters { get; set; }
     }
 }

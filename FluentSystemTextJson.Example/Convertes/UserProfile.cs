@@ -13,7 +13,7 @@ namespace FluentSystemTextJson.Example.Profiles
             //  .IncludeSecure(it => it.Card.ToString()) будет нельзя 
             bulder
                 .IncludeSecure(it => it.Name, firstShowCharacterCount: 8)
-                .IncludeSecure(it => it.Number1, firstShowCharacterCount: 2)
+                .IncludeSecure(it => it.Number1, firstShowCharacterCount: 0)
                 .Include(it => it.Card)
                 .Include(it => it.Cards)
                 .Include(it => it.Other)

@@ -3,6 +3,8 @@ using FluentSystemTextJson.Example.Profiles;
 using FluentSystemTextJson.Example.Models;
 using FluentSystemTextJson.Internal;
 using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace FluentSystemTextJson.Example
 {
@@ -12,6 +14,9 @@ namespace FluentSystemTextJson.Example
         {
             var options =
                 new JsonSerializerOptionsFactoryOptions()
+                {
+                    DefaultNoProfileConverterMessage = "Значение для моделей для которых нет профиля."
+                }
                     .AddProfile(new UserProfile())
                     .AddProfile(new CardInfoProfile());
 
@@ -19,7 +24,14 @@ namespace FluentSystemTextJson.Example
             JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(
                 options,
                 jsonConverterOnProfileFactory);
-            var jsonSerializerOptions = jsonLogSerializerFactory.Create();
+
+            var jsonSerializerOptions =
+                jsonLogSerializerFactory
+                    .Create();
+
+            jsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
+            jsonSerializerOptions.WriteIndented = true;
+
 
             Console.WriteLine(JsonSerializer.Serialize(CreateUser(), jsonSerializerOptions));
         }

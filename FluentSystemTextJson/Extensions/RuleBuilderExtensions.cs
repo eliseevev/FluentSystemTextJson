@@ -21,14 +21,16 @@ namespace FluentSystemTextJson.Extensions
 
             return ruleBuilder.IncludeCustom(
                 (_) 
-                    => 
-                    GetSubstring(propertyExpression.Compile().Invoke(_), firstShowCharacterCount) + new string('*', 3),
+                    =>
+                    GetSecureString(propertyExpression.Compile().Invoke(_), firstShowCharacterCount),
                     propertyInfo.Name);
         }
 
-        private static string GetSubstring(string value, int firstShowCharacterCount)
+        private static string GetSecureString(string value, int firstShowCharacterCount)
         {
-            return value.Substring(0, value.Length > firstShowCharacterCount ? firstShowCharacterCount : value.Length);
+            return 
+                value.Substring(0, value.Length > firstShowCharacterCount ? firstShowCharacterCount : value.Length) +
+                new string('*', 3);
         }
     }
 }

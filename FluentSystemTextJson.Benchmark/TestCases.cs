@@ -76,8 +76,7 @@ namespace FluentSystemTextJson.Benchmark
                 options,
                 jsonConverterOnProfileFactory);
             fluentPreparedJsonSerializerOptions = jsonLogSerializerFactory
-                .Create()
-                .AddDefaultWriteOnlyConverters();
+                .Create();
         }
 
         [Benchmark]

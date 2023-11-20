@@ -9,12 +9,19 @@ namespace FluentSystemTextJson.Internal
     public class JsonSerializerOptionsFactory
     {
         private readonly Lazy<ICollection<JsonConverter>> _converters;
-        private readonly Lazy<JsonSerializerOptions> jsonSerializerOptions;
+        private readonly JsonSerializerOptionsFactoryOptions _jsonSerializerOptionsFactoryOptions;
 
         public JsonSerializerOptionsFactory(
             JsonSerializerOptionsFactoryOptions jsonSerializerOptionsFactoryOptions,
             JsonConverterOnProfileFactory jsonConverterOnProfileFactory)
         {
+            _jsonSerializerOptionsFactoryOptions = jsonSerializerOptionsFactoryOptions ?? throw new NullReferenceException(nameof(jsonSerializerOptionsFactoryOptions));
+
+            if (jsonConverterOnProfileFactory == null)
+            {
+                throw new NullReferenceException(nameof(jsonConverterOnProfileFactory));
+            }
+
             _converters = new Lazy<ICollection<JsonConverter>>(() =>
             {
                 return jsonSerializerOptionsFactoryOptions
@@ -22,20 +29,12 @@ namespace FluentSystemTextJson.Internal
                    .Select(it => jsonConverterOnProfileFactory.CreateProfiledWriteOnlyJsonConverter(it))
                    .ToArray();
             });
-
-            jsonSerializerOptions = new Lazy<JsonSerializerOptions>(CreateJsonSerializerOptions());
         }
 
         public JsonSerializerOptions Create()
         {
-            return jsonSerializerOptions.Value;
-        }
-
-        private JsonSerializerOptions CreateJsonSerializerOptions()
-        {
             var jsonSerializerOptions = new JsonSerializerOptions();
 
-            // Порядок важен! фабрика должна быть в конце!
             jsonSerializerOptions.Converters.Add(JsonMetadataServices.BooleanConverter);
             jsonSerializerOptions.Converters.Add(JsonMetadataServices.ByteConverter);
             jsonSerializerOptions.Converters.Add(JsonMetadataServices.ByteArrayConverter);
@@ -61,9 +60,27 @@ namespace FluentSystemTextJson.Internal
             jsonSerializerOptions.Converters.Add(JsonMetadataServices.UriConverter);
             jsonSerializerOptions.Converters.Add(JsonMetadataServices.VersionConverter);
 
+            if (_jsonSerializerOptionsFactoryOptions.AdditionalConverters != null)
+            {
+                foreach (var converter in _jsonSerializerOptionsFactoryOptions.AdditionalConverters)
+                {
+                    jsonSerializerOptions.Converters.Add(converter);
+                }
+            }
+
             foreach (var converter in _converters.Value)
             {
                 jsonSerializerOptions.Converters.Add(converter);
+            }
+
+            if (_jsonSerializerOptionsFactoryOptions.IncludeDefaultEnumerableConverter)
+            {
+                jsonSerializerOptions.Converters.Add(new DefaultEnumerableWriteOnlyJsonConverter());
+            }
+
+            if (_jsonSerializerOptionsFactoryOptions.IncludeDefaultNoProfileConverter)
+            {
+                jsonSerializerOptions.Converters.Add(new DefaultNoProfileWriteOnlyJsonConverter(_jsonSerializerOptionsFactoryOptions.DefaultNoProfileConverterMessage));
             }
 
             return jsonSerializerOptions;
