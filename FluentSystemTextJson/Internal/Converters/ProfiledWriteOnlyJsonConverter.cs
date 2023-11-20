@@ -2,11 +2,11 @@
 
 namespace FluentSystemTextJson.Internal.Converters
 {
-    internal class RuleWriteJsonConverter<T> : WriteOnlyJsonConverter<T>
+    internal class ProfiledWriteOnlyJsonConverter<T> : WriteOnlyJsonConverter<T>
     {
         private readonly Rule<T> _rule;
 
-        public RuleWriteJsonConverter(
+        public ProfiledWriteOnlyJsonConverter(
             Rule<T> rule)
         {
             _rule = rule ?? throw new ArgumentNullException(nameof(rule));

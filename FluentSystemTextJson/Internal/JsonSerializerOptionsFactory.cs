@@ -12,14 +12,14 @@ namespace FluentSystemTextJson.Internal
         private readonly Lazy<JsonSerializerOptions> jsonSerializerOptions;
 
         public JsonSerializerOptionsFactory(
-            JsonSerializerOptionsFactoryOptions jsonLogSerializerOptions,
+            JsonSerializerOptionsFactoryOptions jsonSerializerOptionsFactoryOptions,
             JsonConverterOnProfileFactory jsonConverterOnProfileFactory)
         {
             _converters = new Lazy<ICollection<JsonConverter>>(() =>
             {
-                return jsonLogSerializerOptions
+                return jsonSerializerOptionsFactoryOptions
                    .LogProfiles
-                   .Select(it => jsonConverterOnProfileFactory.CreateJsonLogProfileWriteConverterConverter(it))
+                   .Select(it => jsonConverterOnProfileFactory.CreateProfiledWriteOnlyJsonConverter(it))
                    .ToArray();
             });
 
@@ -34,11 +34,6 @@ namespace FluentSystemTextJson.Internal
         private JsonSerializerOptions CreateJsonSerializerOptions()
         {
             var jsonSerializerOptions = new JsonSerializerOptions();
-
-            //var factory = new JsonLogJsonConverterFactory(_converters.Value);
-
-            //var a = _converters.Value.Keys.SelectMany(JsonMetadataServices.CreateArrayInfo(jsonSerializerOptions)
-            // для массовов возможно стоит копать в эту сторону
 
             // Порядок важен! фабрика должна быть в конце!
             jsonSerializerOptions.Converters.Add(JsonMetadataServices.BooleanConverter);
@@ -70,9 +65,6 @@ namespace FluentSystemTextJson.Internal
             {
                 jsonSerializerOptions.Converters.Add(converter);
             }
-
-            jsonSerializerOptions.Converters.Add(new DefaultEnumerableWriteJsonConverter());
-            jsonSerializerOptions.Converters.Add(new DefaultNoProfileJsonConverter());
 
             return jsonSerializerOptions;
         }

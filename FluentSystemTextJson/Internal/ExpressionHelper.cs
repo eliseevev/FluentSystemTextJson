@@ -5,7 +5,7 @@ namespace FluentSystemTextJson.Internal
 {
     internal static class ExpressionHelper
     {
-        public static PropertyInfo GetPropertyExpression<T>(Expression<Func<T, object>> propertyExpression)
+        internal static PropertyInfo GetPropertyExpression<T>(Expression<Func<T, object>> propertyExpression)
         {
             if (!(GetMemberExpression(propertyExpression) is MemberExpression memberExpression))
             {

@@ -10,21 +10,21 @@ namespace FluentSystemTextJson
         private static MethodInfo genericMethodInfo =
             typeof(JsonConverterOnProfileFactory)
                 .GetMethod(
-                    nameof(CreateJsonLogProfileWriteConverterConverterInternal),
+                    nameof(CreateProfiledWriteOnlyJsonConverterInternal),
                     BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public JsonConverter<T> CreateJsonLogProfileWriteConverterConverter<T>(ConvertProfile<T> logProfile)
+        public JsonConverter<T> CreateProfiledWriteOnlyJsonConverter<T>(ConvertProfile<T> logProfile)
         {
-            return CreateJsonLogProfileWriteConverterConverterInternal<T>(logProfile);
+            return CreateProfiledWriteOnlyJsonConverterInternal<T>(logProfile);
         }
 
-        internal JsonConverter CreateJsonLogProfileWriteConverterConverter(ConvertProfile logProfile)
+        internal JsonConverter CreateProfiledWriteOnlyJsonConverter(ConvertProfile logProfile)
         {
             MethodInfo genMetSum = genericMethodInfo.MakeGenericMethod(logProfile.Type);
             return (JsonConverter)genMetSum.Invoke(this, new[] { logProfile });
         }
 
-        private JsonConverter<T> CreateJsonLogProfileWriteConverterConverterInternal<T>(
+        private JsonConverter<T> CreateProfiledWriteOnlyJsonConverterInternal<T>(
             ConvertProfile logProfile)
         {
             var typedConvertProfile = logProfile as ConvertProfile<T>;
@@ -33,9 +33,9 @@ namespace FluentSystemTextJson
                 throw new ArgumentException("ConvertProfile is not type of ConvertProfile<T>");
             }
 
-            var hideWriterRuleBuilder = typedConvertProfile.GetRuleBuilder().Build();
+            var rule = typedConvertProfile.GetRuleBuilder().Build();
 
-            return new RuleWriteJsonConverter<T>(hideWriterRuleBuilder);
+            return new ProfiledWriteOnlyJsonConverter<T>(rule);
         }
     }
 }

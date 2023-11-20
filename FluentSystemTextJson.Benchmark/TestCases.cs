@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using FluentSystemTextJson.Contracts;
 using FluentSystemTextJson.Example.Models;
+using FluentSystemTextJson.Extensions;
 using FluentSystemTextJson.Internal;
 using System.Text.Json;
 using SystemTextJsonFluentIgnorer.Benchmark.Fluent;
@@ -11,12 +12,7 @@ namespace FluentSystemTextJson.Benchmark
     [MemoryDiagnoser]
     public class TestCases
     {
-        User user;
-
-        [GlobalSetup]
-        public void GlobalSetup()
-        {
-            user = new User()
+        User user = new User()
             {
                 Id = 1,
                 Name = "Test",
@@ -46,7 +42,6 @@ namespace FluentSystemTextJson.Benchmark
                     new CardInfo(),
                 }
             };
-        }
 
 
         [Benchmark]
@@ -80,7 +75,9 @@ namespace FluentSystemTextJson.Benchmark
             JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(
                 options,
                 jsonConverterOnProfileFactory);
-            var jsonSerializerOptions = jsonLogSerializerFactory.Create();
+            fluentPreparedJsonSerializerOptions = jsonLogSerializerFactory
+                .Create()
+                .AddDefaultWriteOnlyConverters();
         }
 
         [Benchmark]

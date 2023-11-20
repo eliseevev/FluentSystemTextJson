@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace FluentSystemTextJson.Internal.Converters
 {
-    internal class DefaultEnumerableWriteJsonConverter : WriteOnlyJsonConverter<object>
+    internal class DefaultEnumerableWriteOnlyJsonConverter : WriteOnlyJsonConverter<object>
     {
         private static Type enumerableType = typeof(IEnumerable);
 
