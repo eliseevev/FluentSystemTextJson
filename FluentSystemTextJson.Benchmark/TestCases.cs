@@ -2,7 +2,6 @@
 using FluentSystemTextJson.Contracts;
 using FluentSystemTextJson.Example.Models;
 using FluentSystemTextJson.Extensions;
-using FluentSystemTextJson.Internal;
 using System.Text.Json;
 using SystemTextJsonFluentIgnorer.Benchmark.Fluent;
 using SystemTextJsonFluentIgnorer.Benchmark.Fluent.SystemText;
@@ -71,10 +70,8 @@ namespace FluentSystemTextJson.Benchmark
                     .AddProfile(new CardInfoProfile())
                     .AddProfile(new NestedClassLevel_3Profile());
 
-            JsonConverterOnProfileFactory jsonConverterOnProfileFactory = new JsonConverterOnProfileFactory();
             JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(
-                options,
-                jsonConverterOnProfileFactory);
+                options);
             fluentPreparedJsonSerializerOptions = jsonLogSerializerFactory
                 .Create();
         }

@@ -5,10 +5,10 @@ using System.Text.Json.Serialization;
 
 namespace FluentSystemTextJson
 {
-    public class JsonConverterOnProfileFactory
+    public class ProfiledWriteOnlyJsonConverterFactory
     {
         private static MethodInfo genericMethodInfo =
-            typeof(JsonConverterOnProfileFactory)
+            typeof(ProfiledWriteOnlyJsonConverterFactory)
                 .GetMethod(
                     nameof(CreateProfiledWriteOnlyJsonConverterInternal),
                     BindingFlags.NonPublic | BindingFlags.Instance);

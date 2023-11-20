@@ -1,5 +1,6 @@
 ﻿using FluentSystemTextJson.Contracts;
 using FluentSystemTextJson.Example.Models;
+using FluentSystemTextJson.Extensions;
 
 namespace FluentSystemTextJson.Example.Profiles
 {
@@ -8,8 +9,10 @@ namespace FluentSystemTextJson.Example.Profiles
         public override void Configure(IRuleBuilder<CardInfo> bulder)
         {
             bulder
+                .IncludeAll()
+                .Skip(it => it.Provider)
                 .Include(it => it.Number)
-                .Include(it => it.CCVCode);
+                .IncludeSecure(it => it.CCVCode);
         }
     }
 }

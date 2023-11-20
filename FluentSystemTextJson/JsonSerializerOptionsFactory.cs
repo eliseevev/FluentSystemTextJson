@@ -4,34 +4,29 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
-namespace FluentSystemTextJson.Internal
+namespace FluentSystemTextJson
 {
     public class JsonSerializerOptionsFactory
     {
         private readonly Lazy<ICollection<JsonConverter>> _converters;
-        private readonly JsonSerializerOptionsFactoryOptions _jsonSerializerOptionsFactoryOptions;
+        protected readonly JsonSerializerOptionsFactoryOptions _jsonSerializerOptionsFactoryOptions;
 
         public JsonSerializerOptionsFactory(
-            JsonSerializerOptionsFactoryOptions jsonSerializerOptionsFactoryOptions,
-            JsonConverterOnProfileFactory jsonConverterOnProfileFactory)
+            JsonSerializerOptionsFactoryOptions jsonSerializerOptionsFactoryOptions)
         {
             _jsonSerializerOptionsFactoryOptions = jsonSerializerOptionsFactoryOptions ?? throw new NullReferenceException(nameof(jsonSerializerOptionsFactoryOptions));
 
-            if (jsonConverterOnProfileFactory == null)
-            {
-                throw new NullReferenceException(nameof(jsonConverterOnProfileFactory));
-            }
-
+            var profiledWriteOnlyJsonConverterFactory = new ProfiledWriteOnlyJsonConverterFactory();
             _converters = new Lazy<ICollection<JsonConverter>>(() =>
             {
                 return jsonSerializerOptionsFactoryOptions
                    .LogProfiles
-                   .Select(it => jsonConverterOnProfileFactory.CreateProfiledWriteOnlyJsonConverter(it))
+                   .Select(it => profiledWriteOnlyJsonConverterFactory.CreateProfiledWriteOnlyJsonConverter(it))
                    .ToArray();
             });
         }
 
-        public JsonSerializerOptions Create()
+        public virtual JsonSerializerOptions Create()
         {
             var jsonSerializerOptions = new JsonSerializerOptions();
 

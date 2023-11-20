@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace FluentSystemTextJson.Internal
+﻿namespace FluentSystemTextJson.Internal
 {
     internal class Rule<T>
     {

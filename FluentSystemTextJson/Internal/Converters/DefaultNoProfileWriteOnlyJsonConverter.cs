@@ -5,7 +5,7 @@ namespace FluentSystemTextJson.Internal.Converters
     internal class DefaultNoProfileWriteOnlyJsonConverter : WriteOnlyJsonConverter<object>
     {
         private readonly string _noProfileMessage;
-        public DefaultNoProfileWriteOnlyJsonConverter(string noProfileMessage = "No profile!")
+        public DefaultNoProfileWriteOnlyJsonConverter(string noProfileMessage = "No profile")
         {
             _noProfileMessage = noProfileMessage;
         }

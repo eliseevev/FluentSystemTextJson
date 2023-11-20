@@ -17,7 +17,7 @@ namespace FluentSystemTextJson.Extensions
                 throw new ArgumentNullException(nameof(propertyExpression));
             }
 
-            PropertyInfo propertyInfo = ExpressionHelper.GetPropertyExpression(propertyExpression);
+            PropertyInfo propertyInfo = ExpressionHelper.GetPropertyInfo(propertyExpression);
 
             return ruleBuilder.IncludeCustom(
                 (_) 

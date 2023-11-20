@@ -1,7 +1,6 @@
 ﻿using FluentSystemTextJson.Contracts;
 using FluentSystemTextJson.Example.Profiles;
 using FluentSystemTextJson.Example.Models;
-using FluentSystemTextJson.Internal;
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -20,10 +19,7 @@ namespace FluentSystemTextJson.Example
                     .AddProfile(new UserProfile())
                     .AddProfile(new CardInfoProfile());
 
-            JsonConverterOnProfileFactory jsonConverterOnProfileFactory = new JsonConverterOnProfileFactory();
-            JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(
-                options,
-                jsonConverterOnProfileFactory);
+            JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(options);
 
             var jsonSerializerOptions =
                 jsonLogSerializerFactory

@@ -1,5 +1,4 @@
 using FluentSystemTextJson.Contracts;
-using FluentSystemTextJson.Internal;
 using FluentSystemTextJson.Tests.Models;
 using System.Reflection.Metadata;
 using System.Text.Json;
@@ -17,7 +16,7 @@ namespace FluentSystemTextJson.Tests
                 new JsonSerializerOptionsFactoryOptions()
                     .AddProfile(new ModelA0Profile());
 
-            JsonConverterOnProfileFactory jsonConverterOnProfileFactory = new JsonConverterOnProfileFactory();
+            ProfiledWriteOnlyJsonConverterFactory jsonConverterOnProfileFactory = new ProfiledWriteOnlyJsonConverterFactory();
             JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(
                 options,
                 jsonConverterOnProfileFactory);
