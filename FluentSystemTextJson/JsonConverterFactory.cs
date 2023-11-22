@@ -35,7 +35,8 @@ namespace FluentSystemTextJson
 
             var rule = typedConvertProfile.GetRuleBuilder().Build();
 
-            return new ProfiledWriteOnlyJsonConverter<T>(rule);
+            throw new NotImplementedException();
+            //return new ProfiledWriteOnlyJsonConverter<T>(rule);
         }
     }
 }

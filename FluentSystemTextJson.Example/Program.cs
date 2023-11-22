@@ -4,31 +4,45 @@ using FluentSystemTextJson.Example.Models;
 using System.Text.Json;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.Extensions.Logging;
+using Serilog.Core;
+using FluentSystemTextJson.Internal.Converters;
 
 namespace FluentSystemTextJson.Example
 {
     internal class Program
     {
+        ILogger logger;
+
         static void Main(string[] args)
         {
-            var options =
-                new JsonSerializerOptionsFactoryOptions()
-                {
-                    DefaultNoProfileConverterMessage = "Значение для моделей для которых нет профиля."
-                }
-                    .AddProfile(new UserProfile())
-                    .AddProfile(new CardInfoProfile());
+            ////var options =
+            ////    new JsonSerializerOptionsFactoryOptions()
+            ////    {
+            ////        DefaultNoProfileConverterMessage = "Значение для моделей для которых нет профиля."
+            ////    }
+            ////        .AddProfile(new UserProfile())
+            ////        .AddProfile(new CardInfoProfile());
 
-            JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(options);
+            ////JsonSerializerOptionsFactory jsonLogSerializerFactory = new JsonSerializerOptionsFactory(options);
 
-            var jsonSerializerOptions =
-                jsonLogSerializerFactory
-                    .Create();
+            ////var jsonSerializerOptions =
+            ////    jsonLogSerializerFactory
+            ////        .Create();
 
-            jsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
-            jsonSerializerOptions.WriteIndented = true;
+            ////jsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
+            ////jsonSerializerOptions.WriteIndented = true;
 
 
+
+            var jsonSerializerOptions = new JsonSerializerOptions();
+            ////jsonSerializerOptions.Converters.Add(new InfoFluentJsonConverter());
+
+
+            ////var a = JsonSerializer.SerializeToDocument(CreateUser(), jsonSerializerOptions);
+            Console.WriteLine(JsonSerializer.Serialize(CreateUser(), jsonSerializerOptions));
+            Console.WriteLine(JsonSerializer.Serialize(CreateUser(), jsonSerializerOptions));
+            Console.WriteLine(JsonSerializer.Serialize(CreateUser(), jsonSerializerOptions));
             Console.WriteLine(JsonSerializer.Serialize(CreateUser(), jsonSerializerOptions));
         }
 
@@ -66,6 +80,14 @@ namespace FluentSystemTextJson.Example
             };
 
             return user;
+        }
+
+        public class InfoFluentJsonConverter : ProfiledWriteOnlyJsonConverter<CardInfo>
+        {
+            public override void Configure(IRuleBuilder<CardInfo> builder)
+            {
+                builder.Include(it => it.Number);
+            }
         }
     }
 }
